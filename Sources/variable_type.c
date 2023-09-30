@@ -119,7 +119,141 @@ int main_int_02() {
     return 0;
 }
 
+
+//char实例01
+int main_char_01() {
+    char ch1 = 'a';
+    printf("ch1 -> ascii : %d\n", ch1); //output : 97
+    printf("ascii 86 -> char : %c\n", 86);
+
+    //A (65) 转 a(97) ,之间差32
+    char ch2 = 'A';
+    ch2 = ch2 + 32; //或者 ch2 -' ' ,因为' '空格字符的ascii值是32
+    printf("A + 32 -> : %c\n", ch2);
+
+
+    char ch3 = 'a';
+    printf("ch3 sizeof : %d\n", sizeof(ch3)); // output : 1
+    printf("'a' sizeof : %d\n", sizeof('a')); // output : 4  因为 'a'是 97 ,97是整数,int类型的sizeof是4字节。
+
+
+    //字符'8'转数字8
+    char ch4 = '8';
+    ch4 = ch4 - '0'; // 或者 ch4 -48 ,因为'0'的ascii值是48
+    printf("ch4 - '0' -> %d\n", ch4);
+
+
+    return 0;
+}
+
+int main_char_02() {
+    char ch1;
+    char ch2;
+    //只会从标准输入读取一个字符
+
+    //语句1
+    scanf("%c", &ch1);
+    printf("1. ch1 : %c,%d\n", ch1, ch1);
+
+    //语句2
+    scanf("%c", &ch1);
+    printf("2. ch1 : %c,%d\n", ch1, ch1);
+
+    //语句3
+    scanf("%c", &ch1);
+    printf("3. ch1 : %c,%d\n", ch1, ch1);
+
+    /**
+     * 情况1：输入一个字符后按回车
+     * 语句1：输出这个字符
+     * 语句2：输出回画车
+     * 语然3：等待输入
+     *
+     * 情况2：输入二个字符后按回车
+     * 语句1：输出第一个字符
+     * 语句2：输出第二个字符
+     * 语然3：输出回车
+     *
+     * 情况3：输入三个字符或三个以上的字符后按回车
+     * 语句1：输出第一个字符
+     * 语句2：输出第二个字符
+     * 语然3：输出第三个字符
+     */
+    return 0;
+}
+
+int main_char_03() {
+
+    //语句1
+    char ch1 = getchar();
+    printf("1. ch1 : %c,%d\n", ch1, ch1);
+
+    //语句2
+    char ch2 = getchar();
+    printf("2. ch2 : %c,%d\n", ch2, ch2);
+
+    //语句3
+    char ch3 = getchar();
+    printf("3. ch3 : %c,%d\n", ch3, ch3);
+
+
+    /**
+     * 情况1：输入一个字符后按回车
+     * 语句1：输出这个字符
+     * 语句2：输出回画车
+     * 语然3：等待输入
+     *
+     * 情况2：输入二个字符后按回车
+     * 语句1：输出第一个字符
+     * 语句2：输出第二个字符
+     * 语然3：输出回车
+     *
+     * 情况3：输入三个字符或三个以上的字符后按回车
+     * 语句1：输出第一个字符
+     * 语句2：输出第二个字符
+     * 语然3：输出第三个字符
+     *
+     * 效果与使用scanf()一样
+     */
+
+    return 0;
+}
+
+
+int main_float_01() {
+    float f1 = 3.1415926456;
+    double d1 = 3.1415926456;
+
+    //默认输出6位小数
+    printf("f1 : %f\n", f1);
+    printf("d1 : %lf\n", d1);
+
+    //float类型能够保证的精度是7位有效数字
+    //double类型能够保证的精度是15位有效数字
+    printf("f1 : %.8f\n", f1); // 3.14159274 保证的精度是：3.141592 ,7位
+    printf("d1 : %.8lf\n", d1);
+
+    //%e或%E打印科学计数
+    printf("f1 : %e , %E\n", f1, f1);
+    printf("d1 : %e , %E\n", d1, d1);
+
+    return 0;
+}
+
+int main_str_01() {
+    printf("%s\n", "hello world");
+
+    return 0;
+}
+
+//输出格式
+int main_output_format_01() {
+    printf("here%20s\n", "hello world");
+
+    return 0;
+}
+
 int main() {
-    main_int_02();
+    main_char_03();
     return 0;
 }
