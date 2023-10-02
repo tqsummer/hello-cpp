@@ -1,5 +1,6 @@
 #include <string.h>
 #include "stdio.h"
+#include "string.h"
 
 
 void main_array_name01() {

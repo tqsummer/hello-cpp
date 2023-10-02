@@ -1,0 +1,1 @@
+void module1_max(int a, int b);
