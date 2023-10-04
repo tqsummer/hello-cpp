@@ -1,4 +1,120 @@
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+
+/**
+ * 在函数外面定义的变量叫全局变量，束个工程 都可以使用。
+ * 整个变量程 序启动开辟空间，直到程序结束释放空间
+ */
+int num = 0;
+
+int *getnum() {
+    /**
+     * {}下义的变量叫局部变量，局部变量在函数结束之后的空间会被释放
+     */
+    srand(time(NULL));
+    /**
+     * 如果这里定义的是局部变量
+     * int num = rand();
+     * 函数main_pointer_return01()调用时num的地址已经被释放
+     * 执行结果是：getnum p : 0000000000000000 ，然后程序异常退出。
+     */
+    num = rand();
+    return &num;
+}
+
+/**
+ * 指针作为函数返回值
+ */
+
+void main_pointer_return01() {
+    int *p = getnum();
+    printf("getnum p : %p\n", p);
+    printf("getnum *p : %d\n", *p);
+}
+
+/**
+ * void print_array(int a[])  -> void print_array(int *a) 数组作为函数的形参会退化为指针
+ *
+ * 这个函数需要传len，主要原因是传入的a实际是&a[0](a[0]的地址)，这个地址无法知道数组长度，所以需要传数组元素个数。
+ * @param a 数组参数
+ * @param len 数组元素个数
+ */
+void print_array(int *a, int len) {
+    /**
+     * 32位编译器下，n值为1
+     * 64位编译器下，n值为2
+     *
+     * 64位编译器下
+     *
+     * 1.sizeof(a) -> sizeof(&a[0])
+     * 地址类型的sizeof为8 ，这里的8是8个字节
+     *
+     * 2.sizeof(a[0]) -> sizeof(*(a+0)) -> sizeof(*(a)) -> sizeof(*(&a[0])) -> sizeof(a[0]) ->sizeof(1)
+     * sizeof(a[0]),a[0]的值为1，是int类型 -> sizeof(int)  int类型的sizeof为4 ，这里的4是4个字节
+     *
+     * 3.所以int n = sizeof(a) / sizeof(a[0])的值为2
+     *
+     */
+    int n = sizeof(a) / sizeof(a[0]);
+    printf("n : %d\n", n);
+
+    for (int i = 0; i < len; i++) {
+        /**
+         * a[i] = *(a+i) = *(&a[0]+i) = *(&a[i]) = a[i]
+         */
+        printf("a[%d] : %d\n", i, a[i]);
+    }
+}
+
+/**
+ * 数组作为函数形参
+ */
+
+void main_pointer_parameter05() {
+    int a[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    print_array(a, sizeof(a) / sizeof(a[0]));
+    /**
+     * 执行结果：
+     * n : 2
+     * a[0] : 1
+     * a[1] : 2
+     * a[2] : 3
+     * a[3] : 4
+     * a[4] : 5
+     * a[5] : 6
+     * a[6] : 7
+     * a[7] : 8
+     * a[8] : 9
+     * a[9] : 10
+     */
+
+}
+
+
+void swap(int *a, int *b) {
+    int tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+/**
+ * 指针作为函数形参
+ */
+
+void main_pointer_parameter04() {
+    int a = 10;
+    int b = 20;
+    printf("before a : %d , b : %d \n", a, b);
+    swap(&a, &b);
+    printf("after a : %d , b : %d \n", a, b);
+
+    /**
+     * 执行结果:
+     * before a : 10 , b : 20
+     * after a : 20 , b : 10
+     */
+}
 
 /**
  * 指针数组
@@ -374,7 +490,7 @@ void main_pointer_use01() {
 
 int main() {
     printf("-----------------start pointer------------------\n");
-    main_pointer_array_pointer04();
+    main_pointer_return01();
     printf("-----------------end pointer------------------\n");
 
     return 0;
