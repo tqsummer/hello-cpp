@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include "my_math.h"
 
-
-
 //swap声明函数
 //extern void swap(int a, int b);
 //void swap(int a, int b);
