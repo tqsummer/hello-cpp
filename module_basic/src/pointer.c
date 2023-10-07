@@ -1,6 +1,324 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <string.h>
+
+/**
+ * 字符串指针数组作为main函数参数
+ */
+
+void main_pointer_main_parameter01(int argc, char *argv[]) {
+    printf("argc : %d\n", argc);
+    for (int i = 0; i < argc; i++) {
+        printf("argv[%d] : %s\n", i, argv[i]);
+    }
+    /**
+     * 执行未带参数结果：
+     * argc : 1
+     * argv[0] : D:\Workspace\StudyWorkspace\CppProjects\hello-cpp\cmake-build-debug\module_basic\MB-PointerMain.exe
+     * 执行文件作为第一个参数值，所以argc至少有一个参数，就是执行文件本身。
+     *
+     * 执行D:\Workspace\StudyWorkspace\CppProjects\hello-cpp\cmake-build-debug\module_basic\MB-PointerMain.exe a=hello b=world
+     * 结果：
+     * argc : 3
+     * argv[0] : D:\Workspace\StudyWorkspace\CppProjects\hello-cpp\cmake-build-debug\module_basic\MB-PointerMain.exe
+     * argv[1] : a=hello
+     * argv[2] : b=world
+     */
+
+}
+
+/**
+ * 字符串常用库函数
+ */
+void main_pointer_str04() {
+    /**
+     * strcpy(char *str1,char *str2)
+     * 将str2的字符拷贝至str1数组中，注意，str2遇到\0结束，会将\0拷贝至str1
+     */
+    char str1[32] = "helloworld";
+    char str2[32] = "sky";
+    strcpy(str1, str2);
+    printf("str1 : %s\n", str1);
+    for (int i = 0; i < 32; i++) {
+        printf("%c", str1[i]);
+    }
+    printf("\n\n");
+
+    /**
+     * strncpy(char *str1,char *str2,int n)
+     * 将str2中的前n个字符拷贝至str1数组中，如果str2遇到\0并且不足n个，后面都补\0直到满n个
+     */
+
+    char str3[32] = "helloworld";
+    char str4[32] = "s\0kyabc";
+    strncpy(str3, str4, 5);
+    printf("str3 : %s\n", str3);
+    for (int i = 0; i < 32; i++) {
+        printf("%c", str3[i]);
+    }
+    printf("\n\n");
+
+    /**
+     * strcat(char *str1,char *str2)
+     * 将str2中的字符连接至str1数组中，如果str2遇到\0结束
+     *
+     * strncat(char *str1,char *str2,int n)
+     * 将str2中的前n个字符连接至str1数组中，如果str2遇到\0并且不足n个，后面都补\0直到满n个
+     */
+
+    /**
+     * strcmp(char *str1,char *str2)
+     * str1数组中和str2数组中取一个元素比较，相等继续往后比较
+     * 比较的是字符的ascii值
+     * 如果str1>str2 返回1
+     * 如果str1=str2 返回0
+     * 如果str1<str2 返回-1
+     *
+     *
+     * strncmp(char *str1,char *str2,int n)
+     * str1数组中和str2数组中取一个元素比较，相等继续往后比较，最多比较n个字符
+     *
+     */
+
+    /**
+     * 组包函数
+     * int sprintf(char *__stream, const char *__format, ...)
+     * __stream：组包存放的字符数组
+     * __format：格式
+     * ... ：数据参数
+     * int 返回的组包存的有效长度
+     */
+    int year = 2023;
+    int month = 10;
+    int day = 7;
+    char buf[128];
+    int len = sprintf(buf, "year : %d ,month : %d ,day : %d", year, month, day);
+    printf("sprintf len : %d , str : [%s]\n", len, buf);
+
+    /**
+     * 拆包函数
+     * int sscanf(char *__stream, const char *__format, ...)
+     * __stream：拆包读取的字符数组
+     * __format：格式
+     * ... ：拆包参数地址
+     * int 返回值 成功则返回成功转换的值的个数，失败则返回-1
+     */
+    //scanf("%d-%d-%d",year,month,day);//这个是从标准输入(键盘)中拆包
+    char buf2[] = "2024-11-08";
+    int ret = sscanf(buf2, "%d-%d-%d", &year, &month, &day);
+    printf("sscanf year : %d ,moth : %d ,day : %d , ret : %d\n", year, month, day, ret);
+
+
+}
+
+/**
+ * 字符指针数组
+ * 参号：https://www.processon.com/view/link/6520e2592c86306603f3fe31
+ */
+
+void main_pointer_str03() {
+
+    /**
+     * 以下代码等价于：
+     * char* h1 = "hehe";
+     * char* h2 = "haha";
+     * char* h3 = "hoho";
+     * char *str_arr[] = {h1,h2,h3};
+     */
+    char *str_arr[] = {"hehe", "haha", "hoho"};
+
+    printf("**str_arr : %c\n", **str_arr);
+
+    /**
+     * 打印字符指针数组的字符串内容
+     */
+    for (int i = 0; i < sizeof(str_arr) / sizeof(str_arr[0]); i++) {
+        /**
+         * 打印字符串，需要的是元素首地址
+         * str_arr[i]是char * 类型，保存的是字符数组首元素地址
+         */
+        printf("str_arr[%d] = %s\n", i, str_arr[i]);
+    }
+
+    /**
+     * 定义一个指针保存str_arr首元素地址
+     * 因为字符串数组，每个元素的类型是char *
+     * 所以获取字符串数组的首元素地址的类型是 char **
+     */
+    char **p = str_arr;
+
+    /**
+     * *p指向的是&str_arr[0](首元素地址)指向的内容，*p =*(&str_arr[0]) = str_arr[0] -> 是char * 字符数组指针 -> hehe\0字符数组首元素地址
+     * 所以打印的结果是:hehe
+     */
+    printf("*p str : %s\n", *p);
+
+
+
+    /**
+     * 定义一个指针保存str_arr第i个元素的地址，这里i=1
+     * 因为str_arr[i]的类型是char *
+     * 所以定义的这个指针的类型为char **
+     */
+    char **p1 = &str_arr[1];
+
+    /**
+     * p1 等价于 p+1
+     * str_arr+1 -> &str_arr[0]+1 -> &str_arr[1]
+     * p+1 -> &str_arr[0]+1 -> &str_arr[1]
+     * p1 = &str_arr[1]
+     *
+     */
+    printf("str_arr+1 : %p , p+1 : %p , p1 : %p \n", str_arr + 1, p + 1, p1);
+
+    /**
+     * p+2 -> &str_arr[0]+2 -> &str_arr[2]
+     * *(p+2) -> *(&str_arr[2]) -> str_arr[2]-> 这里得到的是字符数组(hoho\0)首元素地址
+     * %s输出是首元素开始到\0结束，所以输出结果是hoho
+     */
+    printf("*(p+2) : %p , %s\n", *(p + 2), *(p + 2));
+
+    /**
+     * 因为：*(p+2) -> *(&str_arr[2]) -> str_arr[2]-> 这里得到的是字符数组(hoho\0)首元素地址
+     * 所以**(p+2)得到的是字符数组首元素地址指向的字符h
+     *
+     * *(p+2)+1 -> 字符数组(hoho\0)首元素地址+1 -> 字符数组(hoho\0)第二个元素地址
+     * *(*(p+2)+1)得到的是字符数组第二个(下标为1的)元素地址指向的字符o
+     *
+     * str_arr[2]-> 字符数组(hoho\0)首元素地址
+     * str_arr[2][2]-> 字符数组(hoho\0)第三个(下标为2的)元素地址指向的字符h
+     */
+    printf("**(p+2) : %c , *(*(p+2)+1) : %c , str_arr[2][2] : %c\n", **(p + 2), *(*(p + 2) + 1), str_arr[2][2]);
+
+
+}
+
+/**
+ * 将dest字符串拼接到src上
+ * @param src
+ * @param dest
+ * @return
+ */
+char *my_strcat(char *src, char *dest) {
+    int n_src = strlen(src);
+    int i = 0;
+    while (dest[i] != '\0') {
+        /**
+         * 这行代码等价于:*(src+n_src+i) = *(dest+i)
+         */
+        src[n_src + i] = dest[i];
+        i++;
+    }
+    src[n_src + i] = '\0';
+    return src;
+}
+
+/**
+ * 字符指针作为形参
+ */
+
+void main_pointer_str02() {
+    char a[128] = "hello world";
+    char b[128] = ",let's go!";
+    printf("my_strcat() str : %s \n", my_strcat(a, b));
+
+}
+
+/**
+ * 字符串常量
+ */
+
+void main_pointer_str01() {
+    /**
+     * 定义了一个字符数组，字符数组内容为helloworld\0
+     */
+    char a[] = "helloworld";
+    /**
+     * 定义了一个指针，指向了a相当于指向了&a[0]
+     */
+    char *p = a;
+    /**
+     * abcdefg是一个字符串常量，字符串常量存在文字常量区，现在p重新指向到这个字符串常量的首元素地址。
+     */
+    p = "abcdefg";
+
+    /**
+     * p指向到字符串常量的首元素地址
+     * 这里打印的是:abcdefg
+     */
+    printf("p str : %s\n", p);
+
+    /**
+     * 以下代码会报错，
+     * 1.因为p现在指向的是字符串常量的首元素地址
+     * 2.字符串常量存在文字常量区
+     * 3.文字常量区的内容不可以被改变
+     * 所以会报错
+     */
+    //*p = 'm';
+}
+
+/**
+ * 指针与字符数组
+ */
+
+void main_pointer_char_array01() {
+    /**
+     * 定义了一个字符数组，字符数组内容为helloworld\0
+     * 数组a的长度为11
+     */
+    char a[] = "helloworld";
+    char *p = a;
+    /**
+     * a相当于&a[0]
+     * 打印一个字符串，要的是首个字符&a[0](a[0]的地址)的地址开始到\0字符结束
+     * 打印结果是:helloworld
+     */
+    printf("p str : %s\n", p);
+    /**
+     *  p+2 -> a+2 -> &a[0]+2 -> a[2]
+     * 打印一个字符串，首个字符&a[2](a[2]的地址)开始到\0字符结束
+     * 打印结果是:lloworld
+     */
+    printf("p+2 str : %s\n", p + 2);
+    /**
+     * p+4 -> a+4 -> &a[0]+4 -> &a[4]
+     * *(p+4) -> *(&a[4]) -> a[4]
+     * 打印一个a[4]地址指向的内容
+     * 打印结果是:o
+     */
+    printf("*(p+4) char : %c\n", *(p + 4));
+
+
+    /**
+     * sizeof(a):字符数组字节长度，这里11个字符，长度是11个字节
+     * sizeof(p):指针类型字节长度，64位编译器是8个字节，长度是8个字节
+     */
+    printf("sizeof(a) : %d\n", sizeof(a));
+    printf("sizeof(p) : %d\n", sizeof(p));
+
+    /**
+     * strlen(a) = strlen(p):a与p指向的地址都是&a[0],得到的字符串的有效长度相同
+     */
+    printf("strlen(a) : %d\n", strlen(a));
+    printf("strlen(p) : %d\n", strlen(p));
+
+    /**
+     * *p -> *(&a[0]) -> a[0] ,相当于给a[0]赋值
+     * 所以字符数组a打印出来的字符串为:melloworld
+     */
+    *p = 'm';
+    printf("p str : %s\n", p);
+
+    /**
+     * 指针可以用++运算符，但是字符数组a不可以。
+     * p++相当于p = p+1,将指针步长加1赋值给p,p指向&a[1]
+     * 此时打印的结果是:elloworld
+     */
+    p++;
+    printf("p str : %s\n", p);
+}
 
 /**
  * 在函数外面定义的变量叫全局变量，束个工程 都可以使用。
@@ -488,9 +806,9 @@ void main_pointer_use01() {
 
 }
 
-int main() {
+int main(int argc, char *argv[]) {
     printf("-----------------start pointer------------------\n");
-    main_pointer_return01();
+    main_pointer_str04();
     printf("-----------------end pointer------------------\n");
 
     return 0;

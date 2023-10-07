@@ -603,4 +603,275 @@ printf("getnum *p : %d\n", *p);
 
 ```
 
+### 指针与字符数组
 
+```c
+/**
+ * 指针与字符数组
+ */
+
+void main_pointer_char_array01() {
+/**
+ * 定义了一个字符数组，字符数组内容为helloworld\0
+ * 数组a的长度为11
+ */
+char a[] = "helloworld";
+char *p = a;
+/**
+ * a相当于&a[0]
+ * 打印一个字符串，要的是首个字符&a[0](a[0]的地址)的地址开始到\0字符结束
+ * 打印结果是:helloworld
+ */
+printf("p str : %s\n", p);
+/**
+ *  p+2 -> a+2 -> &a[0]+2 -> a[2]
+ * 打印一个字符串，首个字符&a[2](a[2]的地址)开始到\0字符结束
+ * 打印结果是:lloworld
+ */
+printf("p+2 str : %s\n", p + 2);
+/**
+ * p+4 -> a+4 -> &a[0]+4 -> &a[4]
+ * *(p+4) -> *(&a[4]) -> a[4]
+ * 打印一个a[4]地址指向的内容
+ * 打印结果是:o
+ */
+printf("*(p+4) char : %c\n", *(p + 4));
+
+
+/**
+ * sizeof(a):字符数组字节长度，这里11个字符，长度是11个字节
+ * sizeof(p):指针类型字节长度，64位编译器是8个字节，长度是8个字节
+ */
+printf("sizeof(a) : %d\n", sizeof(a));
+printf("sizeof(p) : %d\n", sizeof(p));
+
+/**
+ * strlen(a) = strlen(p):a与p指向的地址都是&a[0],得到的字符串的有效长度相同
+ */
+printf("strlen(a) : %d\n", strlen(a));
+printf("strlen(p) : %d\n", strlen(p));
+
+/**
+ * *p -> *(&a[0]) -> a[0] ,相当于给a[0]赋值
+ * 所以字符数组a打印出来的字符串为:melloworld
+ */
+*p = 'm';
+printf("p str : %s\n", p);
+
+/**
+ * 指针可以用++运算符，但是字符数组a不可以。
+ * p++相当于p = p+1,将指针步长加1赋值给p,p指向&a[1]
+ * 此时打印的结果是:elloworld
+ */
+p++;
+printf("p str : %s\n", p);
+}
+
+```
+
+### 字符串常量
+
+```c
+/**
+ * 字符串常量
+ */
+
+void main_pointer_str_const01() {
+/**
+ * 定义了一个字符数组，字符数组内容为helloworld\0
+ */
+char a[] = "helloworld";
+/**
+ * 定义了一个指针，指向了a相当于指向了&a[0]
+ */
+char * p = a;
+/**
+ * abcdefg是一个字符串常量，字符串常量存在文字常量区，现在p重新指向到这个字符串常量的首元素地址。
+ */
+p = "abcdefg";
+
+/**
+ * p指向到字符串常量的首元素地址
+ * 这里打印的是:abcdefg
+ */
+printf("p str : %s\n", p);
+
+/**
+ * 以下代码会报错，
+ * 1.因为p现在指向的是字符串常量的首元素地址
+ * 2.字符串常量存在文字常量区
+ * 3.文字常量区的内容不可以被改变
+ * 所以会报错
+ */
+//*p = 'm';
+}
+
+```
+
+### 字符指针作为形参
+
+```c
+/**
+ * 将dest字符串拼接到src上
+ * @param src
+ * @param dest
+ * @return
+ */
+char *my_strcat(char *src, char *dest) {
+int n_src = strlen(src);
+int i = 0;
+while (dest[i] != '\0') {
+/**
+ * 这行代码等价于:*(src+n_src+i) = *(dest+i)
+ */
+src[n_src + i] = dest[i];
+i++;
+}
+src[n_src + i] = '\0';
+return src;
+}
+
+/**
+ * 字符指针作为形参
+ */
+
+void main_pointer_str02() {
+char a[128] = "hello world";
+char b[128] = ",let's go!";
+printf("my_strcat() str : %s \n", my_strcat(a, b));
+
+}
+```
+
+### 字符指什数组
+
+参号：https://www.processon.com/view/link/6520e2592c86306603f3fe31
+
+```c
+/**
+ * 字符指针数组
+ * 
+ */
+
+void main_pointer_str03() {
+
+/**
+ * 以下代码等价于：
+ * char* h1 = "hehe";
+ * char* h2 = "haha";
+ * char* h3 = "hoho";
+ * char *str_arr[] = {h1,h2,h3};
+ */
+char *str_arr[] = {
+"hehe", "haha", "hoho"
+};
+
+printf("**str_arr : %c\n", **str_arr);
+
+/**
+ * 打印字符指针数组的字符串内容
+ */
+for (int i = 0; i < sizeof(str_arr) / sizeof(str_arr[0]); i++) {
+/**
+ * 打印字符串，需要的是元素首地址
+ * str_arr[i]是char * 类型，保存的是字符数组首元素地址
+ */
+printf("str_arr[%d] = %s\n", i, str_arr[i]);
+}
+
+/**
+ * 定义一个指针保存str_arr首元素地址
+ * 因为字符串数组，每个元素的类型是char *
+ * 所以获取字符串数组的首元素地址的类型是 char **
+ */
+char **p = str_arr;
+
+/**
+ * *p指向的是&str_arr[0](首元素地址)指向的内容，*p =*(&str_arr[0]) = str_arr[0] -> 是char * 字符数组指针 -> hehe\0字符数组首元素地址
+ * 所以打印的结果是:hehe
+ */
+printf("*p str : %s\n", *p);
+
+
+
+/**
+ * 定义一个指针保存str_arr第i个元素的地址，这里i=1
+ * 因为str_arr[i]的类型是char *
+ * 所以定义的这个指针的类型为char **
+ */
+char **p1 = &str_arr[1];
+
+/**
+ * p1 等价于 p+1
+ * str_arr+1 -> &str_arr[0]+1 -> &str_arr[1]
+ * p+1 -> &str_arr[0]+1 -> &str_arr[1]
+ * p1 = &str_arr[1]
+ *
+ */
+printf("str_arr+1 : %p , p+1 : %p , p1 : %p \n", str_arr + 1, p + 1, p1);
+
+/**
+ * p+2 -> &str_arr[0]+2 -> &str_arr[2]
+ * *(p+2) -> *(&str_arr[2]) -> str_arr[2]-> 这里得到的是字符数组(hoho\0)首元素地址
+ * %s输出是首元素开始到\0结束，所以输出结果是hoho
+ */
+printf("*(p+2) : %p , %s\n", *(p + 2), *(p + 2));
+
+/**
+ * 因为：*(p+2) -> *(&str_arr[2]) -> str_arr[2]-> 这里得到的是字符数组(hoho\0)首元素地址
+ * 所以**(p+2)得到的是字符数组首元素地址指向的字符h
+ *
+ * *(p+2)+1 -> 字符数组(hoho\0)首元素地址+1 -> 字符数组(hoho\0)第二个元素地址
+ * *(*(p+2)+1)得到的是字符数组第二个(下标为1的)元素地址指向的字符o
+ *
+ * str_arr[2]-> 字符数组(hoho\0)首元素地址
+ * str_arr[2][2]-> 字符数组(hoho\0)第三个(下标为2的)元素地址指向的字符h
+ */
+printf("**(p+2) : %c , *(*(p+2)+1) : %c , str_arr[2][2] : %c\n", **(p + 2), *(*(p + 2) + 1), str_arr[2][2]);
+
+
+}
+
+```
+
+### 字符串指针数组作为main函数参数
+
+main函数支持参数  
+参数一argc:参数个数,类型int  
+参数二argv:参数内容,类型char *[]
+
+```c
+/**
+ * 字符串指针数组作为main函数参数
+ */
+
+void main_pointer_main_parameter01(int argc, char *argv[]) {
+printf("argc : %d\n", argc);
+for (int i = 0; i < argc; i++) {
+printf("argv[%d] : %s\n", i, argv[i]);
+}
+/**
+ * 执行未带参数结果：
+ * argc : 1
+ * argv[0] : D:\Workspace\StudyWorkspace\CppProjects\hello-cpp\cmake-build-debug\module_basic\MB-PointerMain.exe
+ * 执行文件作为第一个参数值，所以argc至少有一个参数，就是执行文件本身。
+ *
+ * 执行D:\Workspace\StudyWorkspace\CppProjects\hello-cpp\cmake-build-debug\module_basic\MB-PointerMain.exe a=hello b=world
+ * 结果：
+ * argc : 3
+ * argv[0] : D:\Workspace\StudyWorkspace\CppProjects\hello-cpp\cmake-build-debug\module_basic\MB-PointerMain.exe
+ * argv[1] : a=hello
+ * argv[2] : b=world
+ */
+
+}
+
+
+int main(int argc, char *argv[]) {
+printf("-----------------start pointer------------------\n");
+main_pointer_main_parameter01(argc, argv);
+printf("-----------------end pointer------------------\n");
+
+return 0;
+}
+```
