@@ -875,3 +875,364 @@ printf("-----------------end pointer------------------\n");
 return 0;
 }
 ```
+
+### 字符串常用库函数
+
+```c
+/**
+ * 字符串反转
+ * @param str
+ * @return
+ */
+char *my_str_reverse(char *str) {
+char *start = str;
+char *end = str + strlen(str) - 1;
+while (end > start) {
+char tmp = *start;
+*start = *end;
+*end = tmp;
+start++;
+end--;
+}
+return str;
+}
+
+/**
+ * 字符串修剪(把两头空白字符删除)
+ * @param str
+ * @return
+ */
+char *my_str_trim(char *str) {
+char *start = str;
+char *end = str + strlen(str) - 1;
+/**
+ * 这里比较的时地址，end地址肯定大于start地址
+ */
+if (start == end) {
+return str;
+}
+while (*start == ' ' && *start != '\0') {
+start++;
+}
+
+while (*end == ' ' && end != start) {
+*end = 0;
+end--;
+}
+strncpy(start, start, end-start+1);
+return start;
+}
+
+/**
+ * 找出字符串str1中出现字符串str2的次数
+ * @param str1
+ * @param str2
+ * @return
+ */
+int my_strstr_num(char *str1, char *str2) {
+char *p = str1;
+int str2_len = strlen(str2);
+int n = 0;
+do {
+p = strstr(p, str2);
+if (p != NULL) {
+n++;
+p = p + str2_len;
+}
+} while (p != NULL);
+
+return n;
+}
+
+/**
+ * 从字符串str1中找到字符串str2出现的位置，如找到返回位置的地址，如果没有找到返回NULL
+ * @param str1
+ * @param str2
+ * @return
+ */
+char *my_strstr(char *str1, char *str2) {
+int str2_len = strlen(str2);
+int i = 0;
+while (str1[i] != 0) {
+if (strncmp(str1 + i, str2, str2_len) == 0) {
+return str1 + i;
+}
+i++;
+
+}
+return NULL;
+}
+
+/**
+ * 从字符串中找到符合字符出现的位置，如找到返回位置的地址，如果没有找到返回NULL
+ * @param p
+ * @param ch
+ * @return
+ */
+char *my_strchr(char *p, char ch) {
+int i = 0;
+while (p[i] != 0) {
+if (p[i] == ch) {
+return &p[i];
+}
+i++;
+}
+return NULL;
+}
+
+/**
+ * 字符串常用库函数
+ */
+void main_pointer_str04() {
+/**
+ * strcpy(char *str1,char *str2)
+ * 将str2的字符拷贝至str1数组中，注意，str2遇到\0结束，会将\0拷贝至str1
+ */
+char str1[32] = "helloworld";
+char str2[32] = "sky";
+strcpy(str1, str2);
+printf("str1 : %s\n", str1);
+for (int i = 0; i < 32; i++) {
+printf("%c", str1[i]);
+}
+printf("\n\n");
+
+/**
+ * strncpy(char *str1,char *str2,int n)
+ * 将str2中的前n个字符拷贝至str1数组中，如果str2遇到\0并且不足n个，后面都补\0直到满n个
+ */
+
+char str3[32] = "helloworld";
+char str4[32] = "s\0kyabc";
+strncpy(str3, str4, 5);
+printf("str3 : %s\n", str3);
+for (int i = 0; i < 32; i++) {
+printf("%c", str3[i]);
+}
+printf("\n\n");
+
+/**
+ * strcat(char *str1,char *str2)
+ * 将str2中的字符连接至str1数组中，如果str2遇到\0结束
+ *
+ * strncat(char *str1,char *str2,int n)
+ * 将str2中的前n个字符连接至str1数组中，如果str2遇到\0并且不足n个，后面都补\0直到满n个
+ */
+
+/**
+ * strcmp(char *str1,char *str2)
+ * str1数组中和str2数组中取一个元素比较，相等继续往后比较
+ * 比较的是字符的ascii值
+ * 如果str1>str2 返回1
+ * 如果str1=str2 返回0
+ * 如果str1<str2 返回-1
+ *
+ *
+ * strncmp(char *str1,char *str2,int n)
+ * str1数组中和str2数组中取一个元素比较，相等继续往后比较，最多比较n个字符
+ *
+ */
+
+/**
+ * 组包函数
+ * int sprintf(char *__stream, const char *__format, ...)
+ * __stream：组包存放的字符数组
+ * __format：格式
+ * ... ：数据参数
+ * int 返回的组包存的有效长度
+ */
+int year = 2023;
+int month = 10;
+int day = 7;
+char buf[128];
+int len = sprintf(buf, "year : %d ,month : %d ,day : %d", year, month, day);
+printf("sprintf len : %d , str : [%s]\n", len, buf);
+
+/**
+ * 拆包函数
+ * int sscanf(char *__stream, const char *__format, ...)
+ * __stream：拆包读取的字符数组
+ * __format：格式
+ * ... ：拆包参数地址
+ * int 返回值 成功则返回成功转换的值的个数，失败则返回-1
+ */
+//scanf("%d-%d-%d",year,month,day);//这个是从标准输入(键盘)中拆包
+char buf2[] = "2024-11-08";
+int ret = sscanf(buf2, "%d-%d-%d", &year, &month, &day);
+printf("sscanf year : %d ,moth : %d ,day : %d , ret : %d\n", year, month, day, ret);
+
+
+/**
+ * char * strchr(char * str,char ch)
+ * 从字符串中找到符合字符的位置，如找到返回位置的地址，如果没有找到返回NULL
+ */
+char str[] = "hi,let's go!Ok";
+//char *p = my_strchr(str, 'l');
+char *p = strchr(str, 'l');
+if (p) {
+printf("p : %p , *p : %c , str : %s\n", p, *p, p);
+} else {
+printf("p not found!\n");
+}
+
+/**
+ * char * strstr(char *str1,char * str2)
+ * 从字符串str1中找到字符串str2出现的位置，如找到返回位置的地址，如果没有找到返回NULL
+ */
+char str5[] = "aliyundrive.com";
+char str6[] = "drive";
+//char *p2 = my_strstr(str5, str6);
+char *p2 = strstr(str5, str6);
+if (p2) {
+printf("p2 : %p , *p2 : %c , str : %s\n", p2, *p2, p2);
+} else {
+printf("p2 not found!\n");
+}
+
+/**
+ * char * strtok(char *str1,char * str2)
+ * 从str1中切割字符串，切割符为str2中的任意字符。切割成功返回字符串首元素地址，切割失败已结束则返回NULL
+ * 首次切割调用传字符串，后几次传NULL，直到切割完成为止。
+ */
+//初始化字符串数组，全部初始化为NULL
+char str7[] = "2018#09#18&ha&he&ho";
+char str8[] = "#&";
+char *str_arr[10] = {};
+for (int i = 0; i < sizeof(str_arr) / sizeof(str_arr[0]); i++) {
+printf("str_arr[%d] : %s\n", i, str_arr[i]);
+}
+int i = 0;
+do {
+if (i == 0) {
+str_arr[i] = strtok(str7, str8);
+} else {
+str_arr[i] = strtok(NULL, str8);
+}
+} while (str_arr[i++] != NULL);
+
+i = 0;
+while (str_arr[i] != NULL) {
+printf("str_arr[%d] : %s\n", i, str_arr[i]);
+i++;
+}
+
+/**
+ * int atoi(char * num)
+ * 将字符串转成整数，+-0~9的字符就开始转，如果不是+-0~9的字符结束
+ * 如果前面有空格，跳过
+ *
+ * float atof(char * num)
+ * long atol(char * num)
+ * long long atoll(char * num)
+ *
+ */
+char str9[] = " 1250";
+char str10[] = "3.1415";
+printf("str9 atoi : %d\n", atoi(str9));
+printf("str10 atof : %f\n", atof(str10));
+
+/**
+ * int my_strstr_num(char *str1, char *str2)
+ * 找出字符串str1中出现字符串str2的次数
+ */
+char str11[] = "abc11111abc2ab34abc7865abcd";
+char str12[] = "abc";
+printf("my_strstr_num : %d\n", my_strstr_num(str11, str12));
+
+/**
+ *char *my_str_trim(char *str)
+ * 字符串修剪
+ */
+char str13[] = "     abcdefghijklmn       ";
+char *new_str13 = my_str_trim(str13);
+printf("my_str_trim : %s,strlen : %d\n", new_str13, strlen(new_str13));
+
+/**
+ * char *my_str_reverse(char *str)
+ * 字符串反转
+ */
+char str14[] = "abcdefghijklmn";
+printf("my_str_reverse : %s\n", my_str_reverse(str14));
+
+}
+
+```
+
+## 内存
+
+### 作用域
+
+变量起作用的范围
+
+### 变量
+
+1. 局部变量  : 在｛｝内定义的变量,auto int c,默认是auto
+2. 静态局部变量 ：在｛｝内定义的变量,用static修饰变量, static int d
+3. 全局变量 ：在函数之外定义的变量
+4. 静态全局变量 ：在函数之外定义的变量,用static修饰变量
+
+```c
+//全局变量
+int a;
+//静态全局变量
+static int b;
+
+void func(){
+//局部变量
+int c;
+//静态局部变量
+static int d;
+{
+//局部变量
+int e;
+//静态局部变量
+static int f;
+}
+}
+
+```
+
+生命周期：什么时候开辟空间（出生），释放空间（死亡），这个过程叫生命周期
+
+#### 局部变量
+
+1. 作用域：在定义变量的{}之内有效
+2. 生命周期：定义变量开辟空间开始~该变量所在函数结束之后释放空间
+3. 未初始化的值：随机
+
+#### 静态局部变量
+
+1. 作用域：在定义变量的{}之内有效
+2. 生命周期：执行main函数运行之前开辟空间开始~程序结束之后释放空间
+3. 未初始化的值：0
+
+#### 全局变量
+
+* 在其他文件使用extern进行声明，并且可使用。
+
+1. 作用域：整个工程，所有文件
+2. 生命周期：执行main函数运行之前开辟空间开始~程序结束之后释放空间
+3. 未初始化的值：0
+
+#### 静态全局变量
+
+不能通过extern进行声明
+
+1. 作用域：当前文件
+2. 生命周期：执行main函数运行之前开辟空间开始~程序结束之后释放空间
+3. 未初始化的值：0
+
+> 作用域：局部变量(普通局部和静态局部)在{}范围；普通全局变量作用域在整个工程；静态全局变量作用域在当前文件。  
+> 生命周期：只有局部变量是定义变量开辟空间开始~
+> 该变量所在函数结束之后释放空间，其他变量都是执行main函数运行之前开辟空间开始~程序结束之后释放空间。        
+> 未初始化的值：只有局部变量是随机，其他变量都是0
+
+#### 变量重名问题
+
+#### 静态函数
+
+静态函数：定义时，用static修饰的函数，静态函数只能当前文件调用。
+static void func(){}
+
+普通函数：定义时，没有加任何修饰的函数，也称全局函数，整个工程可以调用。    
+void func(){}

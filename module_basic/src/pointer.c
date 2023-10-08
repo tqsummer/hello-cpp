@@ -29,6 +29,107 @@ void main_pointer_main_parameter01(int argc, char *argv[]) {
 }
 
 /**
+ * 字符串反转
+ * @param str
+ * @return
+ */
+char *my_str_reverse(char *str) {
+    char *start = str;
+    char *end = str + strlen(str) - 1;
+    while (end > start) {
+        char tmp = *start;
+        *start = *end;
+        *end = tmp;
+        start++;
+        end--;
+    }
+    return str;
+}
+
+/**
+ * 字符串修剪(把两头空白字符删除)
+ * @param str
+ * @return
+ */
+char *my_str_trim(char *str) {
+    char *start = str;
+    char *end = str + strlen(str) - 1;
+    /**
+     * 这里比较的时地址，end地址肯定大于start地址
+     */
+    if (start == end) {
+        return str;
+    }
+    while (*start == ' ' && *start != '\0') {
+        start++;
+    }
+
+    while (*end == ' ' && end != start) {
+        *end = 0;
+        end--;
+    }
+    strncpy(start,start,end-start+1);
+    return start;
+}
+
+/**
+ * 找出字符串str1中出现字符串str2的次数
+ * @param str1
+ * @param str2
+ * @return
+ */
+int my_strstr_num(char *str1, char *str2) {
+    char *p = str1;
+    int str2_len = strlen(str2);
+    int n = 0;
+    do {
+        p = strstr(p, str2);
+        if (p != NULL) {
+            n++;
+            p = p + str2_len;
+        }
+    } while (p != NULL);
+
+    return n;
+}
+
+/**
+ * 从字符串str1中找到字符串str2出现的位置，如找到返回位置的地址，如果没有找到返回NULL
+ * @param str1
+ * @param str2
+ * @return
+ */
+char *my_strstr(char *str1, char *str2) {
+    int str2_len = strlen(str2);
+    int i = 0;
+    while (str1[i] != 0) {
+        if (strncmp(str1 + i, str2, str2_len) == 0) {
+            return str1 + i;
+        }
+        i++;
+
+    }
+    return NULL;
+}
+
+/**
+ * 从字符串中找到符合字符出现的位置，如找到返回位置的地址，如果没有找到返回NULL
+ * @param p
+ * @param ch
+ * @return
+ */
+char *my_strchr(char *p, char ch) {
+    int i = 0;
+    while (p[i] != 0) {
+        if (p[i] == ch) {
+            return &p[i];
+        }
+        i++;
+    }
+    return NULL;
+}
+
+/**
  * 字符串常用库函数
  */
 void main_pointer_str04() {
@@ -109,6 +210,98 @@ void main_pointer_str04() {
     int ret = sscanf(buf2, "%d-%d-%d", &year, &month, &day);
     printf("sscanf year : %d ,moth : %d ,day : %d , ret : %d\n", year, month, day, ret);
 
+
+    /**
+     * char * strchr(char * str,char ch)
+     * 从字符串中找到符合字符的位置，如找到返回位置的地址，如果没有找到返回NULL
+     */
+    char str[] = "hi,let's go!Ok";
+    //char *p = my_strchr(str, 'l');
+    char *p = strchr(str, 'l');
+    if (p) {
+        printf("p : %p , *p : %c , str : %s\n", p, *p, p);
+    } else {
+        printf("p not found!\n");
+    }
+
+    /**
+     * char * strstr(char *str1,char * str2)
+     * 从字符串str1中找到字符串str2出现的位置，如找到返回位置的地址，如果没有找到返回NULL
+     */
+    char str5[] = "aliyundrive.com";
+    char str6[] = "drive";
+    //char *p2 = my_strstr(str5, str6);
+    char *p2 = strstr(str5, str6);
+    if (p2) {
+        printf("p2 : %p , *p2 : %c , str : %s\n", p2, *p2, p2);
+    } else {
+        printf("p2 not found!\n");
+    }
+
+    /**
+     * char * strtok(char *str1,char * str2)
+     * 从str1中切割字符串，切割符为str2中的任意字符。切割成功返回字符串首元素地址，切割失败已结束则返回NULL
+     * 首次切割调用传字符串，后几次传NULL，直到切割完成为止。
+     */
+    //初始化字符串数组，全部初始化为NULL
+    char str7[] = "2018#09#18&ha&he&ho";
+    char str8[] = "#&";
+    char *str_arr[10] = {};
+    for (int i = 0; i < sizeof(str_arr) / sizeof(str_arr[0]); i++) {
+        printf("str_arr[%d] : %s\n", i, str_arr[i]);
+    }
+    int i = 0;
+    do {
+        if (i == 0) {
+            str_arr[i] = strtok(str7, str8);
+        } else {
+            str_arr[i] = strtok(NULL, str8);
+        }
+    } while (str_arr[i++] != NULL);
+
+    i = 0;
+    while (str_arr[i] != NULL) {
+        printf("str_arr[%d] : %s\n", i, str_arr[i]);
+        i++;
+    }
+
+    /**
+     * int atoi(char * num)
+     * 将字符串转成整数，+-0~9的字符就开始转，如果不是+-0~9的字符结束
+     * 如果前面有空格，跳过
+     *
+     * float atof(char * num)
+     * long atol(char * num)
+     * long long atoll(char * num)
+     *
+     */
+    char str9[] = " 1250";
+    char str10[] = "3.1415";
+    printf("str9 atoi : %d\n", atoi(str9));
+    printf("str10 atof : %f\n", atof(str10));
+
+    /**
+     * int my_strstr_num(char *str1, char *str2)
+     * 找出字符串str1中出现字符串str2的次数
+     */
+    char str11[] = "abc11111abc2ab34abc7865abcd";
+    char str12[] = "abc";
+    printf("my_strstr_num : %d\n", my_strstr_num(str11, str12));
+
+    /**
+     *char *my_str_trim(char *str)
+     * 字符串修剪
+     */
+    char str13[] = "     abcdefghijklmn       ";
+    char *new_str13 = my_str_trim(str13);
+    printf("my_str_trim : %s,strlen : %d\n", new_str13, strlen(new_str13));
+
+    /**
+     * char *my_str_reverse(char *str)
+     * 字符串反转
+     */
+    char str14[] = "abcdefghijklmn";
+    printf("my_str_reverse : %s\n", my_str_reverse(str14));
 
 }
 
