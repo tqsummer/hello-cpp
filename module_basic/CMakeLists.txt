@@ -36,6 +36,11 @@ set(ScopeMain
         ${CMAKE_CURRENT_SOURCE_DIR}/src/scope03.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/scope04.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/scope05.c)
+set(MemoryMain
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/memory.c)
+
+set(StructTypeMain
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/struct_type.c)
 # 添加可执行文件
 add_executable(MB-VariableTypeMain ${VariableTypeMain})
 add_executable(MB-OpCodeStructMain ${OpCodeStructMain})
@@ -43,6 +48,8 @@ add_executable(MB-ArrayMain ${ArrayMain})
 add_executable(MB-FunctionMain ${FunctionMain})
 add_executable(MB-PointerMain ${PointerMain})
 add_executable(MB-ScopeMain ${ScopeMain})
+add_executable(MB-MemoryMain ${MemoryMain})
+add_executable(MB-StructTypeMain ${StructTypeMain})
 
 # 如果 Module1 需要链接其他库，可以在这里添加链接命令
 # target_link_libraries(ModuleBasic <其他库的名称>)

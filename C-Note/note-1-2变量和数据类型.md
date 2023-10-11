@@ -316,6 +316,13 @@ sizeof():用来测数据类型的大小(字节数)，传值可以是变量也可
 | 有符号 | 	%hd  | 	%d  | 	%ld  | %lld      |
 | 无符号 | 	%ud  | 	%u  | 	%lu  | %llu      |
 
+> char 打印十六进制的bug，打印时需要强制转换为unsigned char
+>
+> 究其原因，%x 是 unsigned int 或 int 型输出 ，  
+> 所以 printf("%x", a) 在执行时将自动将 a 类型提升（char 将提升至 int；unsigned char 将提升至 unsigned int），  
+> 注意到 char 是 signed（有符号的），如果这时 a 是负数 ，在提升的时候前面将会补1 ，即象反例中的 0xf1 => 0xfffffff1；  
+> 而unsigned char 在提升的时候只会补0
+
 ### 字符型
 
 单个字符用单引号''连接
