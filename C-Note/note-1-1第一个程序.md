@@ -1,5 +1,7 @@
 # C语言
 
+参考手册：https://www.w3cschool.cn/c/c-standard-library.html
+
 gcc配置到环境变量：C:\Program Files\JetBrains\CLion 2023.2.2\bin\mingw\bin
 
 命令行编译:  
@@ -13,8 +15,8 @@ gcc <源文件.c> -o <输出文件.exe>
 * 头文件展开：#include <stdio.h>(预处理时将#include的文件内容拷贝到预处理文件中)
 * 删除注释，注释有两种方式：// 和 /* */
 * 宏替换：# define 代表是声明一个宏，在预处理时会将宏给替换
-* 预处理时不会检查语法错误
 * 条件编译：条件不成立(#if 0 -> #endif)代码不进预处理文件 条件成立(#if1 -> #endif)代码进预处理文件
+* 预处理时不会检查语法错误
 
 2. 编译
 

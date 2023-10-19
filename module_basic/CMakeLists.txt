@@ -41,6 +41,9 @@ set(MemoryMain
 
 set(StructTypeMain
         ${CMAKE_CURRENT_SOURCE_DIR}/src/struct_type.c)
+
+set(FileMain
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/file.c)
 # 添加可执行文件
 add_executable(MB-VariableTypeMain ${VariableTypeMain})
 add_executable(MB-OpCodeStructMain ${OpCodeStructMain})
@@ -50,6 +53,7 @@ add_executable(MB-PointerMain ${PointerMain})
 add_executable(MB-ScopeMain ${ScopeMain})
 add_executable(MB-MemoryMain ${MemoryMain})
 add_executable(MB-StructTypeMain ${StructTypeMain})
+add_executable(MB-FileMain ${FileMain})
 
 # 如果 Module1 需要链接其他库，可以在这里添加链接命令
 # target_link_libraries(ModuleBasic <其他库的名称>)
